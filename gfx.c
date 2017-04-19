@@ -500,7 +500,7 @@ int res=0;
 	}
 	return res;
 }
-int firstdown(vopid)
+int firstdown(int vopid)
 {
 	return *downcodes;
 }

@@ -46,6 +46,7 @@ int netframe;
 int mydatacount;
 int myslot;
 int network;
+int deads;
 char masterhostname[256];
 
 char *remapstring="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.:!?\177/\\*-,>< =";
@@ -950,7 +951,9 @@ char tname[256];
 		bm+=width;
 	}
 	lseek(ihand,-0x300,SEEK_END);
-	read(ihand,gs->gs_colormap,0x300);
+	if (read(ihand,gs->gs_colormap,0x300) < 0){
+		printf("Error");
+	}
 	close(ihand);
 	return 0;
 	
@@ -1345,6 +1348,9 @@ void adddeath(player *pl)
 int xpos,ypos;
 	xpos=tovideox(pl->xpos)+pl->fixx-10;
 	ypos=tovideoy(pl->ypos)+pl->fixy;
+	deads+=1;
+	printf("%d\n",deads);
+	fflush(stdout);
 	queuesequence(xpos,ypos,death,NUMDEATHFRAMES);
 }
 void queuesequence(int xpos,int ypos,figure *fig,int count)
@@ -1690,6 +1696,7 @@ player *pl;
 	pl->color=color;
 	pl->speed=6<<FRACTION;
 	pl->flags=0;
+	pl->deads=0;
 	pl->fixx=-4;
 	pl->fixy=-40;
 	pl->flamelength=gameoptions[GO_FLAMES]+1;
@@ -1912,12 +1919,13 @@ void helptext(char *cmd)
 	fprintf(stderr, "Use: %s [-m matcher_host]\n", cmd);
 }
 
-int main(int argc,char **argv)
-{
-int i;
-char *p;
+int main(int argc,char **argv){
+	int i;
+	char *p;
 
 	mname=0;
+
+	signal(SIGINT, INThandler);
 
 	for(i=1;i<argc;++i)
 	{
@@ -1939,7 +1947,7 @@ char *p;
 		}
 			
 	}
-	if(!mname) mname="matcher.xdr.com";
+	if(!mname) mname="127.0.0.1";
 
 	strcpy(playername,"ANONYMOUS");
 	p=getenv("USER");
@@ -2699,4 +2707,10 @@ static int deathcount=0;
 			deathcount=0;
 	}
 	return CODE_CONT;
+}
+
+
+void  INThandler(int sig)
+{
+	exit(0);
 }

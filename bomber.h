@@ -76,6 +76,7 @@ typedef struct player
 	int color;
 	int controller;
 	int fixx,fixy;
+	int deads;
 	figure *figure;
 } player;
 
@@ -330,7 +331,7 @@ int soundopen(void);
 void soundclose(void);
 void playsound(int n);
 
-
+void INThandler(int);
 
 
 #endif // BOMBER_H

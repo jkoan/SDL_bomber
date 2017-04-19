@@ -144,7 +144,7 @@ void soundclose(void)
 int readsound(int num)
 {
 char name[256],*p1,*p2,ch;
-int i,file,size,len;
+int file,size,len;
 	p1=dirlist;
 	for(;;)
 	{
@@ -168,7 +168,7 @@ int i,file,size,len;
 	p1=samples[num].data=malloc(len);
 	if(p1)
 	{
-		i=read(file,p1,size);
+		//int i=read(file,p1,size);
 		if(len-size) memset(p1+size,0,len-size);
 		while(size--) *p1++ ^= 0x80;
 	} else

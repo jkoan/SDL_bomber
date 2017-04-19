@@ -21,16 +21,16 @@ clean:
 test:	all
 	./bomber
 
+fresh:	clean all
 
 
-
-WORK = /ram
+WORK = build
 VER = 1.0.4
 DDIR = SDL_bomber-$(VER)
 
 package:  clean
 	rm -rf $(WORK)/$(DDIR)
-	mkdir $(WORK)/$(DDIR)
+	mkdir -p $(WORK)/$(DDIR)
 	cp *.c *.h Makefile* README INSTALL COPYING AUTHORS TODO $(WORK)/$(DDIR)
 	cp -a data $(WORK)/$(DDIR)
 	cp ChangeLog $(WORK)/$(DDIR)
